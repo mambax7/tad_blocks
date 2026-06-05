@@ -3,6 +3,7 @@ use Xmf\Request;
 use XoopsModules\Tadtools\TadDataCenter;
 use XoopsModules\Tadtools\TadUpFiles;
 use XoopsModules\Tadtools\Utility;
+use XoopsModules\Tad_blocks\Tools;
 
 /*-----------引入檔案區--------------*/
 require_once __DIR__ . '/header.php';
@@ -12,38 +13,38 @@ if (!$tad_blocks_adm) {
 header('HTTP/1.1 200 OK');
 $xoopsLogger->activated = false;
 /*-----------執行動作判斷區----------*/
-$op = Request::getString('op');
-$bid = !empty($_REQUEST['pk']) ? Request::getInt('pk') : Request::getInt('bid');
+$op        = Request::getString('op');
+$bid       = !empty($_REQUEST['pk']) ? Request::getInt('pk') : Request::getInt('bid');
 $module_id = Request::getString('module_id');
-$col = Request::getString('col');
-$val = Request::getString('val');
-$weight = Request::getInt('weight');
-$side = Request::getInt('side');
-$title = !empty($_REQUEST['value']) ? Request::getString('value') : Request::getString('title');
-$tag = Request::getString('tag');
-$link_url = Request::getString('link_url');
+$col       = Request::getString('col');
+$val       = Request::getString('val');
+$weight    = Request::getInt('weight');
+$side      = Request::getInt('side');
+$title     = !empty($_REQUEST['value']) ? Request::getString('value') : Request::getString('title');
+$tag       = Request::getString('tag');
+$link_url  = Request::getString('link_url');
 
 switch ($op) {
 
     case "update_newblock":
-        update_newblock($bid, $side, $weight);
+        Tools::update_newblock($bid, $side, $weight);
         exit;
 
     case "change_block_module_link":
-        change_block_module_link($bid, $module_id);
+        Tools::change_block_module_link($bid, $module_id);
         exit;
 
     case "change_newblock":
-        change_newblock($bid, $col, $val);
+        Tools::change_newblock($bid, $col, $val);
         header("location: {$_SERVER['HTTP_REFERER']}");
         exit;
 
     case "visible":
-        change_newblock($bid, 'visible', 1);
+        Tools::change_newblock($bid, 'visible', 1);
         exit;
 
     case "invisible":
-        change_newblock($bid, 'visible', 0);
+        Tools::change_newblock($bid, 'visible', 0);
         exit;
 
     case "update_title":
@@ -67,44 +68,6 @@ switch ($op) {
 
 /*-----------功能函數區--------------*/
 
-//列出所有區塊
-function change_newblock($bid, $col, $val)
-{
-    global $xoopsDB;
-
-    $sql = 'UPDATE `' . $xoopsDB->prefix('newblocks') . '` SET `' . $col . '`=? WHERE `bid`=?';
-    if (Utility::query($sql, 'si', [$val, $bid])) {
-        return;
-    } else {
-        die($sql);
-    }
-}
-
-function update_newblock($bid, $side, $weight)
-{
-    global $xoopsDB;
-
-    $sql = 'UPDATE `' . $xoopsDB->prefix('newblocks') . '` SET `side`=?, `weight`=? WHERE `bid`=?';
-    if (!Utility::query($sql, 'iii', [$side, $weight, $bid])) {
-        die($sql);
-    } else {
-        die("update $bid OK");
-    }
-}
-
-//列出所有區塊
-function change_block_module_link($bid, $module_id)
-{
-    global $xoopsDB;
-
-    $sql = 'UPDATE `' . $xoopsDB->prefix('block_module_link') . '` SET `module_id`=? WHERE `block_id`=?';
-    if (Utility::query($sql, 'ii', [$module_id, $bid])) {
-        exit;
-    } else {
-        die($sql);
-    }
-}
-
 function setting_form($bid)
 {
     global $xoopsDB, $tags;
@@ -113,39 +76,39 @@ function setting_form($bid)
     $show_link = ['link'];
     $show_help = ['pic', 'img'];
 
-    $sql = 'SELECT * FROM `' . $xoopsDB->prefix('newblocks') . '` WHERE `bid` = ?';
+    $sql    = 'SELECT * FROM `' . $xoopsDB->prefix('newblocks') . '` WHERE `bid` = ?';
     $result = Utility::query($sql, 'i', [$bid]) or die($sql);
 
     $block = $xoopsDB->fetchArray($result);
-    $save = _TAD_SAVE;
+    $save  = _TAD_SAVE;
 
-    $title = $block['title'];
+    $title        = $block['title'];
     $display_link = $display_file = $display_help = 'style="display:none;"';
-    $jquery = Utility::get_jquery(false, 'return');
+    $jquery       = Utility::get_jquery(false, 'return');
     foreach ($tags as $tag) {
-        $start = strpos($block['title'], "[$tag]");
+        $start        = strpos($block['title'], "[$tag]");
         $selected_tag = "selected_{$tag}";
         if ($start !== false) {
-            $title = substr($block['title'], 0, $start);
-            $old_tag = "[$tag]";
+            $title         = substr($block['title'], 0, $start);
+            $old_tag       = "[$tag]";
             $$selected_tag = 'selected';
-            $display_file = in_array($tag, $show_file) ? '' : $display_file;
-            $display_link = in_array($tag, $show_link) ? '' : $display_link;
-            $display_help = in_array($tag, $show_help) ? '' : $display_help;
+            $display_file  = in_array($tag, $show_file) ? '' : $display_file;
+            $display_link  = in_array($tag, $show_link) ? '' : $display_link;
+            $display_help  = in_array($tag, $show_help) ? '' : $display_help;
         } else {
             $$selected_tag = '';
         }
     }
 
-    $url = XOOPS_URL;
+    $url    = XOOPS_URL;
     $choose = _MD_TAD_BLOCKS_CHOOSE;
-    $hide = _MD_TAD_BLOCKS_TITLE_HIDE;
-    $pic = _MD_TAD_BLOCKS_TITLE_PIC;
-    $img = _MD_TAD_BLOCKS_TITLE_IMG;
-    $icon = _MD_TAD_BLOCKS_TITLE_ICON;
-    $link = _MD_TAD_BLOCKS_TITLE_LINK;
+    $hide   = _MD_TAD_BLOCKS_TITLE_HIDE;
+    $pic    = _MD_TAD_BLOCKS_TITLE_PIC;
+    $img    = _MD_TAD_BLOCKS_TITLE_IMG;
+    $icon   = _MD_TAD_BLOCKS_TITLE_ICON;
+    $link   = _MD_TAD_BLOCKS_TITLE_LINK;
     $upload = _MD_TAD_BLOCKS_UPLOAD_PIC;
-    $help = _MD_TAD_BLOCKS_LOGO_HELP;
+    $help   = _MD_TAD_BLOCKS_LOGO_HELP;
 
     $form = <<<"EOD"
 $jquery
@@ -200,8 +163,8 @@ EOD;
 function update_title($bid, $title = '', $need_tag = '', $link_url = '')
 {
 
-    $file_up = ['pic', 'img', 'icon'];
-    $have_link = ['link'];
+    $file_up     = ['pic', 'img', 'icon'];
+    $have_link   = ['link'];
     $new_tag_url = '';
     // 圖片類的
     if (in_array($need_tag, $file_up)) {
@@ -209,7 +172,7 @@ function update_title($bid, $title = '', $need_tag = '', $link_url = '')
         if ($_FILES['tag2']['name']) {
             $TadUpFiles = new TadUpFiles("tad_blocks");
             $TadUpFiles->set_col($need_tag, $bid);
-            $files_sn = $TadUpFiles->upload_one_file($_FILES['tag2']['name'], $_FILES['tag2']['tmp_name'], $_FILES['tag2']['type'], $_FILES['tag2']['size'], null, null, null, null, true);
+            $files_sn    = $TadUpFiles->upload_one_file($_FILES['tag2']['name'], $_FILES['tag2']['tmp_name'], $_FILES['tag2']['type'], $_FILES['tag2']['size'], null, null, null, null, true);
             $new_tag_url = $TadUpFiles->get_pic_file('images', 'url', $files_sn);
         } else {
             // 沒上傳，自動產生的
@@ -229,7 +192,7 @@ function update_title($bid, $title = '', $need_tag = '', $link_url = '')
     }
 
     $new_title = $need_tag ? "{$title}[$need_tag]{$new_tag_url}" : $title;
-    change_newblock($bid, 'title', $new_title);
+    Tools::change_newblock($bid, 'title', $new_title);
     die($title);
 }
 

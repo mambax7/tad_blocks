@@ -5,13 +5,13 @@
             <{foreach from=$text key=i item=data}>
                 <tr id="form_data<{$i|default:''}>">
                     <td>
-                        <button type="button" id="<{$i|default:''}>" class="btn btn-sm btn-danger remove_me" title="<{$smarty.const._TAD_DEL}>"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <button type="button" id="<{$i|default:''}>" class="btn btn-sm btn-danger remove_me" aria-label="<{$smarty.const._TAD_DEL}>" title="<{$smarty.const._TAD_DEL}>"><i class="fa fa-times" aria-hidden="true"></i></button>
                     </td>
                     <td>
-                        <div id="demo_pic<{$i|default:''}>" style="width:32px;height:32px;border:1px solid #cfcfcf;background-image:url('<{$img_url.$i}>');background-size:cover;"></div>
+                        <div id="demo_pic<{$i|default:''}>" style="width:2rem;height:2rem;border:0.0625rem solid #cfcfcf;background-image:url('<{$img_url.$i}>');background-size:cover;"></div>
                     </td>
-                    <td style="width: 120px;">
-                        <input type="file" name="img[<{$i|default:''}>]" id="img<{$i|default:''}>" data-id="<{$i|default:''}>" class="upload_img" style="width: 120px;">
+                    <td style="width: 7.5rem;">
+                        <input type="file" name="img[<{$i|default:''}>]" id="img<{$i|default:''}>" data-id="<{$i|default:''}>" class="upload_img" style="width: 7.5rem;">
                         <input type="hidden" name="TDC[img_url][<{$i|default:''}>]" id="img_url<{$i|default:''}>" value="<{$img_url.$i}>">
                     </td>
                     <td>
@@ -36,13 +36,13 @@
 <table style="display:none;">
     <tr id="form_data">
         <td>
-            <button type="button" data-name="remove_me" class="btn btn-sm btn-danger" title="<{$smarty.const._TAD_DEL}>"><i class="fa fa-times" aria-hidden="true"></i></button>
+            <button type="button" data-name="remove_me" class="btn btn-sm btn-danger" aria-label="<{$smarty.const._TAD_DEL}>" title="<{$smarty.const._TAD_DEL}>"><i class="fa fa-times" aria-hidden="true"></i></button>
         </td>
         <td>
-            <div id="demo_pic" style="width:32px;height:32px;border:1px solid #cfcfcf;background-image:url('<{$default.img_url}>');background-size:cover;"></div>
+            <div id="demo_pic" style="width:2rem;height:2rem;border:0.0625rem solid #cfcfcf;background-image:url('<{$default.img_url}>');background-size:cover;"></div>
         </td>
-        <td style="width: 120px;">
-            <input type="file" data-name="img" id="img" class="upload" style="width: 120px;">
+        <td style="width: 7.5rem;">
+            <input type="file" data-name="img" id="img" class="upload" style="width: 7.5rem;">
             <input type="hidden" data-name="TDC[img_url]" id="img_url">
         </td>
         <td>

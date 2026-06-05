@@ -4,8 +4,8 @@
     <a href="index.php?op=block_form" class="btn btn-primary"><{$smarty.const._MD_TAD_BLOCKS_ADD_BLOCK}></a></h3>
 
 <form class="form-inline">
-    <label for="only_mod"><{$smarty.const._MD_TAD_BLOCKS_ONLY}></label>
-    <select id="only_mod" class="form-control form-select" style="max-width: 20rem;">
+    <label for="only_mod" class="mr-2"><{$smarty.const._MD_TAD_BLOCKS_ONLY}></label>
+    <select id="only_mod" class="form-control form-select mr-3" style="max-width: 20rem;">
         <option value=""></option>
         <{foreach from=$alldir key=dirname item=name}>
             <option value="<{$dirname|default:''}>"><{$name|default:''}> (<{$dirname|default:''}>)</option>
@@ -14,7 +14,7 @@
 
     <div class="form-check-inline checkbox-inline">
         <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" id="only_visible" checked>
+            <input type="checkbox" class="form-check-input" id="only_visible" checked aria-label="<{$smarty.const._MD_TAD_BLOCKS_ONLY_VISIBLE}>">
             <{$smarty.const._MD_TAD_BLOCKS_ONLY_VISIBLE}>
         </label>
     </div>

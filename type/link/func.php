@@ -15,7 +15,7 @@ function get_content($bid = 0)
 
     // 傳回陣列的項目
     if ($bid) {
-        $arr = ['groups', 'text', 'url', 'target', 'img_url'];
+        $arr           = ['groups', 'text', 'url', 'target', 'img_url'];
         $TadDataCenter = new TadDataCenter('tad_blocks');
         $TadDataCenter->set_col('bid', $bid);
         $block = $TadDataCenter->getData();
@@ -37,13 +37,12 @@ function get_content($bid = 0)
 function mk_content($bid, $TDC)
 {
     require __DIR__ . "/config.php";
-    $myts = \MyTextSanitizer::getInstance();
 
     $show_type = empty($TDC['show_type']) ? $default['show_type'] : $TDC['show_type'];
-    $item_css = empty($TDC['item_css']) ? $default['item_css'] : $TDC['item_css'];
-    $img_css = empty($TDC['img_css']) ? $default['img_css'] : $TDC['img_css'];
-    $txt_css = empty($TDC['txt_css']) ? $default['txt_css'] : $TDC['txt_css'];
-    $hide_pic = empty($TDC['hide_pic']) ? $default['hide_pic'] : $TDC['hide_pic'];
+    $item_css  = empty($TDC['item_css']) ? $default['item_css'] : $TDC['item_css'];
+    $img_css   = empty($TDC['img_css']) ? $default['img_css'] : $TDC['img_css'];
+    $txt_css   = empty($TDC['txt_css']) ? $default['txt_css'] : $TDC['txt_css'];
+    $hide_pic  = empty($TDC['hide_pic']) ? $default['hide_pic'] : $TDC['hide_pic'];
     $pic_width = empty($TDC['pic_width']) ? $default['pic_width'] : $TDC['pic_width'];
 
     $url = XOOPS_URL;
@@ -57,7 +56,7 @@ function mk_content($bid, $TDC)
     } elseif ($show_type == 'none' || $show_type == 'image') {
         $content = '';
     } else {
-        $content = '<link rel="stylesheet" type="text/css" media="all" title="Style sheet" href="' . XOOPS_URL . '/modules/tadtools/css/vertical_menu.css">
+        $content = '<link rel="stylesheet" type="text/css" media="all" href="' . XOOPS_URL . '/modules/tadtools/css/vertical_menu.css">
         <ul id="tad_block_link_' . $bid . '" class="vertical_menu">';
     }
 
@@ -65,13 +64,28 @@ function mk_content($bid, $TDC)
         if (empty($url)) {
             continue;
         }
-        $text = !empty($TDC['text'][$key]) ? $TDC['text'][$key] : $url;
+        $text   = !empty($TDC['text'][$key]) ? $TDC['text'][$key] : $url;
         $target = !empty($TDC['target'][$key]) ? $TDC['target'][$key] : '_blank';
-        $widht = !empty($pic_width) ? "width: {$pic_width}px;" : '';
+        $width  = !empty($pic_width) ? "width: {$pic_width}px;" : '';
+
+        $opensNewWindow = ($target && ($target === '_blank' || $target === '_new'));
+        $fileExtension  = Utility::fileExtensions($url);
+
+        if ($fileExtension && $opensNewWindow) {
+            // 同時是檔案且開新視窗
+            $title = "title='{$fileExtension}格式（另開新視窗）'";
+        } elseif ($fileExtension) {
+            // 只是檔案
+            $title = "title='{$fileExtension}格式'";
+        } elseif ($opensNewWindow) {
+            // 只是開新視窗
+            $title = "title='另開新視窗'";
+        }
+
         if ($show_type == 'image') {
-            $icon = !empty($TDC['img_url'][$key]) ? '<img src="' . $TDC['img_url'][$key] . '" alt="' . $text . '" class="img-fluid img-responsive" style="' . $img_css . '">' : '';
+            $icon = !empty($TDC['img_url'][$key]) ? '<img src="' . $TDC['img_url'][$key] . '" alt="點擊圖示連至：' . $text . '" class="img-fluid img-responsive" style="' . $img_css . '">' : '';
         } else {
-            $icon = !empty($TDC['img_url'][$key]) ? '<img src="' . $TDC['img_url'][$key] . '" alt="' . $text . ' icon" style="margin-right: 4px;' . $widht . $img_css . '">' : '';
+            $icon = !empty($TDC['img_url'][$key]) ? '<img src="' . $TDC['img_url'][$key] . '" alt="" class="icon" style="margin-right: 0.25rem;' . $width . $img_css . '">' : '';
         }
 
         if ($hide_pic == 'hide') {
@@ -80,23 +94,23 @@ function mk_content($bid, $TDC)
 
         if ($show_type == 'ul' or $show_type == 'ol') {
             $content .= <<<"EOD"
-<li style="$item_css"><a href="$url" target="{$target}">{$icon}<span style="{$txt_css}">{$text}</span></a></li>
+<li style="$item_css"><a href="$url" target="{$target}" {$title}>{$icon}<span style="{$txt_css}">{$text}</span></a></li>
 EOD;
         } elseif ($show_type == 'table') {
             $content .= <<<"EOD"
-<tr><td style="$item_css"><a href="$url" target="{$target}">{$icon}<span style="{$txt_css}">{$text}</span></a></td></tr>
+<tr><td style="$item_css"><a href="$url" target="{$target}" {$title}>{$icon}<span style="{$txt_css}">{$text}</span></a></td></tr>
 EOD;
         } elseif ($show_type == 'image') {
             $content .= <<<"EOD"
-<div style="$item_css"><a href="$url" target="{$target}" title="{$text}">{$icon}</a></div>
+<div style="$item_css"><a href="$url" target="{$target}" {$title}>{$icon}</a></div>
 EOD;
         } elseif ($show_type == 'none') {
             $content .= <<<"EOD"
-<div><a href="$url" target="{$target}">{$icon}<span style="{$txt_css}">{$text}</span></a></div>
+<div><a href="$url" target="{$target}" {$title}>{$icon}<span style="{$txt_css}">{$text}</span></a></div>
 EOD;
         } else {
             $content .= <<<"EOD"
-<li style="$item_css"><a href="$url" target="{$target}">{$icon}<span style="{$txt_css}">{$text}</span></a></li>
+<li style="$item_css"><a href="$url" target="{$target}" {$title}>{$icon}<span style="{$txt_css}">{$text}</span></a></li>
 EOD;
         }
     }

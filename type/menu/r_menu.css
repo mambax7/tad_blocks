@@ -3,36 +3,52 @@
 .a_link:hover {
     color: #ffffff;
     text-decoration: none;
+    display: block;
+}
+
+/* 移除原本在 <a> 上的 outline，改為對內層套用 box-shadow */
+.a_link:focus,
+.a_link:focus-visible {
+    outline: none;
+}
+
+.a_link:focus .R_menu_bg,
+.a_link:focus-visible .R_menu_bg {
+    box-shadow:
+        0 0 0 2px #ffffff,   /* 內層：白色 */
+        0 0 0 5px #2873ff;   /* 外層：藍色 */
+    border-radius: 0.625rem;
 }
 
 .R_menu_bg {
     width: 100%;
-    height: 45px;
-    line-height: 45px;
+    height: 2.8125rem; /* 45px */
+    line-height: 2.8125rem;
     position: relative;
     overflow: hidden;
-    margin-bottom: 5px;
+    margin-bottom: 0.3125rem; /* 5px */
 }
 
 .R_menu_bot {
     width: 100%;
-    height: 45px;
+    height: 2.8125rem; /* 45px */
     position: relative;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    left: 0px;
+    border-top-right-radius: 0.625rem; /* 10px */
+    border-bottom-right-radius: 0.625rem; /* 10px */
+    left: 0rem;
     transition: 0.2s;
 }
 
 .R_menu_bot:hover {
-    left: -36px;
+    left: -2.25rem; /* -36px */
     transition: 0.2s;
+    border: 3px solid #2873ff;
 }
 
 .R_menu_bot>.shadow {
-    width: 78px;
-    height: 45px;
-    left: -27px;
+    width: 4.875rem; /* 78px */
+    height: 2.8125rem; /* 45px */
+    left: -1.6875rem; /* -27px */
     background-color: #000;
     transform: rotate(-60deg);
     position: relative;
@@ -41,18 +57,18 @@
 
 .R_menu_bot>.icon {
     width: 100%;
-    height: 45px;
-    top: -45px;
-    left: 4px;
+    height: 2.8125rem; /* 45px */
+    top: -2.8125rem; /* -45px */
+    left: 0.25rem; /* 4px */
     position: relative;
-    font-size: 175%;
+    font-size: 1.75rem;
     color: #fff;
-    text-shadow: 1px 1px 2px #000000;
+    text-shadow: 0.0625rem 0.0625rem 0.125rem #000000;
 }
 
 .R_menu_bot .fa {
     display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
+    font: normal normal normal 0.875rem/1 FontAwesome;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -61,10 +77,10 @@
 
 .R_menu_bot>.word {
     width: 100%;
-    height: 45px;
-    top: -90px;
+    height: 2.8125rem; /* 45px */
+    top: -5.625rem; /* -90px */
     position: relative;
     font-family: 'Microsoft JhengHei';
     color: #fff;
-    text-shadow: 1px 1px 2px #000000;
+    text-shadow: 0.0625rem 0.0625rem 0.125rem #000000;
 }

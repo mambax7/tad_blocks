@@ -1,10 +1,10 @@
 .promo-carousel {
-  border-bottom: 1px solid #eee;
+  border-bottom: 0.0625rem solid #eee;
   padding-bottom: 0;
   overflow: hidden;
 }
 .promo-carousel .item-wrap {
-  transform: translateX(0px);
+  transform: translateX(0rem);
   width: 400%;
   position: relative;
   white-space: nowrap;
@@ -13,7 +13,7 @@
 
 .item {
   background: #d3d0d0;
-  border-right: 1px solid #eee;
+  border-right: 0.0625rem solid #eee;
   text-align: center;
   display: flex;
   flex: 1;
@@ -31,7 +31,7 @@
   font-weight: bold;
   line-height: 1.4;
   height: 100%;
-  padding: 10px 0;
+  padding: 0.625rem 0;
 }
 .item.active {
   background: #c0392b;
@@ -40,7 +40,7 @@
   color: #fff;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .promo-carousel .item-wrap {
     width: 200%;
   }

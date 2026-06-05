@@ -5,17 +5,17 @@
         <h3>
             <{if $bid|default:false}>
                 <{if $visible=='1'}>
-                    <a href="ajax.php?op=change_newblock&bid=<{$bid|default:''}>&col=visible&val=0"><img src="images/yes.gif" alt="enable"></a>
+                    <a href="ajax.php?op=change_newblock&bid=<{$bid|default:''}>&col=visible&val=0" aria-label="<{$smarty.const._MD_TAD_BLOCKS_TO_UNABLE}>"><img src="images/yes.gif" alt="<{$smarty.const._MD_TAD_BLOCKS_TO_UNABLE}>"></a>
                 <{else}>
-                    <a href="ajax.php?op=change_newblock&bid=<{$bid|default:''}>&col=visible&val=1"><img src="images/no.gif" alt="unable"></a>
+                    <a href="ajax.php?op=change_newblock&bid=<{$bid|default:''}>&col=visible&val=1" aria-label="<{$smarty.const._MD_TAD_BLOCKS_TO_ENABLE}>"><img src="images/no.gif" alt="<{$smarty.const._MD_TAD_BLOCKS_TO_ENABLE}>"></a>
                 <{/if}>
 
                 <{$smarty.const._MD_TAD_BLOCKS_MODIFY}>
                 <{$title|default:''}>
                 <input type="hidden" name="type" value="<{$type|default:''}>">
             <{else}>
-                <{$smarty.const._MD_TAD_BLOCKS_NEW}>
-                <select name="type" class="form-control form-select" style="width: auto; display: inline-block; color:#000;" onchange="location.href='index.php?op=block_form&type='+this.value+''">
+                <label for="type"><{$smarty.const._MD_TAD_BLOCKS_NEW}></label>
+                <select name="type" id="type" class="form-control form-select" style="width: auto; display: inline-block; color:#000;" onchange="location.href='index.php?op=block_form&type='+this.value+''">
                     <{foreach from=$type_arr key=val item=txt}>
                         <option value="<{$val|default:''}>" <{if $type==$val}>selected="selected"<{/if}>><{$txt|default:''}></option>
                     <{/foreach}>
@@ -26,9 +26,9 @@
         <div class="form-group mb-3">
             <div class="input-group">
                 <div class="input-group-prepend input-group-addon">
-                    <span class="input-group-text"><{$smarty.const._MD_TAD_BLOCKS_TITLE}></span>
+                    <label class="input-group-text" for="title"><{$smarty.const._MD_TAD_BLOCKS_TITLE}></label>
                 </div>
-                <input type="text" class="form-control" name="TDC[title]" placeholder="<{$smarty.const._MD_TAD_BLOCKS_ADD_TITLE}>" value="<{if $title|default:false}><{$title|default:''}><{else}><{$default.title}><{/if}>">
+                <input type="text" class="form-control" name="TDC[title]" id="title" placeholder="<{$smarty.const._MD_TAD_BLOCKS_ADD_TITLE}>" value="<{if $title|default:false}><{$title|default:''}><{else}><{$default.title}><{/if}>">
             </div>
         </div>
         <div class="form-group">
@@ -49,14 +49,14 @@
             </div>
             <div class="col-sm-4">
 
-                <h4><{$smarty.const._MD_TAD_BLOCKS_SORT}></h4>
-                <input class="form-control" type="number" name="TDC[weight]" value="<{$weight|default:''}>">
+                <h4><label for="weight"><{$smarty.const._MD_TAD_BLOCKS_SORT}></label></h4>
+                <input class="form-control" type="number" name="TDC[weight]" id="weight" value="<{$weight|default:''}>">
 
                 <h4 class="mt-3"><{$smarty.const._MD_TAD_BLOCKS_DISPLAY}></h4>
                 <div class="form-group">
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="TDC[display]" id="display_all" value="0" <{if $display==0}>checked<{/if}>>
+                            <input type="radio" class="form-check-input" name="TDC[display]" id="display_all" value="0" <{if $display!=-1}>checked<{/if}>>
                             <{$smarty.const._MD_TAD_BLOCKS_ALL_PAGES}>
                         </label>
                     </div>
@@ -74,9 +74,10 @@
             </div>
         </div>
 
-        <div class="text-center" style="margin:30px auto;">
+        <div class="text-center" style="margin:1.875rem auto;">
             <input type="hidden" name="bid" value="<{$bid|default:''}>">
             <input type="hidden" name="bbid" value="<{$bbid|default:''}>">
+            <input type="hidden" name="display" value="<{$display|default:0}>">
             <input type="hidden" name="op" value="block_save">
             <button type="submit" class="btn btn-primary"><{$smarty.const._MD_TAD_BLOCKS_SAVE}></button>
         </div>

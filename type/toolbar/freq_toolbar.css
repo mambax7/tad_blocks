@@ -2,14 +2,14 @@
 .freq-link ul {
   margin-left: 0;
   padding: 0;
-  border-radius: 0px;
+  border-radius: 0rem;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem; /* 10px */
 }
 
 #freq-link ul li,
 .freq-link ul li {
-  margin-left: 0px;
+  margin-left: 0rem;
   padding: 0;
   display: inline-block;
   list-style: none;
@@ -18,13 +18,13 @@
 #freq-link ul li img,
 .freq-link ul li img {
   margin: 0;
-  /* padding: 10px; */
+  /* padding: 0.625rem; */
   text-align: center;
 }
 
 #freq-link a,
 .freq-link a {
-  margin: 0;
+  margin: 4px 3px;
   padding: 0;
   display: block;
   text-align: center;
@@ -33,6 +33,6 @@
 
 #freq-link a p,
 .freq-link a p {
-  margin-top: 10;
+  margin-top: 0.625rem; /* 10 */
   padding: 0;
 }

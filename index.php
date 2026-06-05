@@ -1,11 +1,11 @@
 <?php
 use Xmf\Request;
+use XoopsModules\Tadtools\AccessibilityFixer;
 use XoopsModules\Tadtools\CkEditor;
 use XoopsModules\Tadtools\SweetAlert;
 use XoopsModules\Tadtools\TadDataCenter;
 use XoopsModules\Tadtools\TadUpFiles;
 use XoopsModules\Tadtools\Utility;
-use XoopsModules\Tadtools\Wcag;
 
 /**
  *  module
@@ -31,12 +31,13 @@ $GLOBALS['xoopsOption']['template_main'] = 'tad_blocks_index.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
 /*-----------執行動作判斷區----------*/
-$op       = Request::getString('op');
-$TDC      = Request::getVar('TDC', [], null, 'array', 2);
-$type     = Request::getString('type');
-$bid      = Request::getInt('bid');
-$bbid     = Request::getInt('bbid');
-$files_sn = Request::getInt('files_sn');
+$op          = Request::getString('op');
+$TDC         = Request::getVar('TDC', [], null, 'array', 2);
+$type        = Request::getString('type');
+$bid         = Request::getInt('bid');
+$bbid        = Request::getInt('bbid');
+$files_sn    = Request::getInt('files_sn');
+$old_display = Request::getString('display');
 
 switch ($op) {
 
@@ -50,7 +51,7 @@ switch ($op) {
         break;
 
     case "block_save":
-        block_save($type, $TDC, $bid, $bbid);
+        block_save($type, $TDC, $bid, $bbid, $old_display);
         header("location: {$_SERVER['PHP_SELF']}");
         exit;
 
@@ -219,7 +220,7 @@ function block_form($type = '', $bid = 0, $bbid = 0)
 }
 
 //儲存並建立區塊
-function block_save($type = '', $TDC = [], $bid = '', $bbid = '')
+function block_save($type = '', $TDC = [], $bid = '', $bbid = '', $old_display = '')
 {
     global $xoopsDB, $xoopsUser, $tags, $tad_blocks_adm;
 
@@ -239,7 +240,9 @@ function block_save($type = '', $TDC = [], $bid = '', $bbid = '')
         $content = $TDC['content'];
     }
 
-    $content       = Wcag::amend($content);
+    if (empty($type)) {
+        $content = AccessibilityFixer::of($content);
+    }
     $last_modified = time();
 
     if (empty($bid)) {
@@ -326,8 +329,10 @@ function block_save($type = '', $TDC = [], $bid = '', $bbid = '')
             Utility::query($sql, 'ssiiii', [$title . $tag2, $content, $side, $weight, $last_modified, $bid]) or Utility::web_error($sql);
 
             // 更新區塊顯示方式
-            $sql = 'UPDATE `' . $xoopsDB->prefix('block_module_link') . '` SET `module_id`=? WHERE `block_id`=?';
-            Utility::query($sql, 'ii', [$TDC['display'], $bid]) or Utility::web_error($sql);
+            if ($old_display != $TDC['display']) {
+                $sql = 'UPDATE `' . $xoopsDB->prefix('block_module_link') . '` SET `module_id`=? WHERE `block_id`=?';
+                Utility::query($sql, 'ii', [$TDC['display'], $bid]) or Utility::web_error($sql);
+            }
 
             // 刪除區塊權限
             $sql = 'DELETE FROM `' . $xoopsDB->prefix('group_permission') . '` WHERE `gperm_itemid`=? AND `gperm_modid`=1 AND `gperm_name`=?';

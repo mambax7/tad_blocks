@@ -24,14 +24,14 @@
         <span class="bt-tag">[icon]</span>
     <{/if}>
 
-    <a href="<{$xoops_url}>/modules/system/admin.php?fct=blocksadmin&op=edit&bid=<{$b.bid}>" target="_blank"><img src="images/wrench.png" alt="<{$smarty.const._TAD_EDIT}>" data-toggle="tooltip" title="<{$smarty.const._TAD_EDIT}>"></a>
+    <a href="<{$xoops_url}>/modules/system/admin.php?fct=blocksadmin&op=edit&bid=<{$b.bid}>" target="_blank" aria-label="<{$smarty.const._TAD_EDIT}> <{$b.title}> (opens in new window)"><img src="images/wrench.png" alt="<{$smarty.const._TAD_EDIT}>" data-toggle="tooltip" title="<{$smarty.const._TAD_EDIT}>"></a>
 
     <{if $b.dirname=='' and $b.c_type=='H'}>
-        <a href="index.php?op=block_form&bid=<{$b.bid}>"><img src="images/pencil.png" alt="<{$smarty.const._MD_TAD_BLOCKS_OPEN_WIDTH_TB}>" data-toggle="tooltip" title="<{$smarty.const._MD_TAD_BLOCKS_OPEN_WIDTH_TB}>"></a>
+        <a href="index.php?op=block_form&bid=<{$b.bid}>" aria-label="<{$smarty.const._MD_TAD_BLOCKS_OPEN_WIDTH_TB}> <{$b.title}>"><img src="images/pencil.png" alt="<{$smarty.const._MD_TAD_BLOCKS_OPEN_WIDTH_TB}>" data-toggle="tooltip" title="<{$smarty.const._MD_TAD_BLOCKS_OPEN_WIDTH_TB}>"></a>
     <{/if}>
 
 
-    <a href="ajax.php?op=setting_form&bid=<{$b.bid}>"  data-fancybox-type="iframe" class="block_setting">
+    <a href="ajax.php?op=setting_form&bid=<{$b.bid}>"  data-fancybox-type="iframe" class="block_setting" aria-label="<{$smarty.const._MD_TAD_BLOCKS_SETTING}> <{$b.title}>">
         <img src="images/setting.png" alt="<{$smarty.const._MD_TAD_BLOCKS_SETTING}>" data-toggle="tooltip" title="<{$smarty.const._MD_TAD_BLOCKS_SETTING}>">
     </a>
 

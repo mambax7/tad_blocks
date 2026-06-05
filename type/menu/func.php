@@ -1,9 +1,9 @@
 <?php
 
+use XoopsModules\Tadtools\Fontawesome6Picker;
 use XoopsModules\Tadtools\MColorPicker;
 use XoopsModules\Tadtools\TadDataCenter;
 use XoopsModules\Tadtools\Utility;
-use XoopsModules\Tadtools\Fontawesome6Picker;
 //取得 menu 區塊DataCenter內容
 function get_content($bid = 0)
 {
@@ -17,7 +17,7 @@ function get_content($bid = 0)
 
     // 傳回陣列的項目
     if ($bid) {
-        $arr = ['groups', 'text', 'url', 'icon', 'm_color', 'target'];
+        $arr           = ['groups', 'text', 'url', 'icon', 'm_color', 'target'];
         $TadDataCenter = new TadDataCenter('tad_blocks');
         $TadDataCenter->set_col('bid', $bid);
         $block = $TadDataCenter->getData();
@@ -44,13 +44,13 @@ function mk_content($bid, $TDC)
     require __DIR__ . "/config.php";
     $myts = \MyTextSanitizer::getInstance();
 
-    $font_size = empty($TDC['font_size']) ? $default['font_size'] : (int) $TDC['font_size'];
+    $font_size  = empty($TDC['font_size']) ? $default['font_size'] : (int) $TDC['font_size'];
     $text_align = empty($TDC['text_align']) ? $default['text_align'] : $myts->htmlSpecialChars($TDC['text_align']);
-    $left = $text_align == 'left' ? $font_size + 10 : 0;
-    $url = XOOPS_URL;
+    $left       = $text_align == 'left' ? $font_size + 10 : 0;
+    $url        = XOOPS_URL;
 
     $font_size_em = round($font_size / 16, 2);
-    $content = <<<"EOD"
+    $content      = <<<"EOD"
 <link href="$url/modules/tad_blocks/type/menu/r_menu.css" rel="stylesheet" type="text/css">
 <style>
 .R_menu_bot>.word {
@@ -74,13 +74,28 @@ EOD;
         }
         // $m_color = $myts->displayTarea($TDC['m_color'][$key], 1, 0, 0, 0, 0);
         $m_color = empty($TDC['m_color'][$key]) ? $default['m_color'] : $myts->htmlSpecialChars($TDC['m_color'][$key]);
-        $icon = empty($TDC['icon'][$key]) ? $default['icon'] : $myts->htmlSpecialChars($TDC['icon'][$key]);
-        $text = empty($TDC['text'][$key]) ? $url : $myts->htmlSpecialChars($TDC['text'][$key]);
+        $icon    = empty($TDC['icon'][$key]) ? $default['icon'] : $myts->htmlSpecialChars($TDC['icon'][$key]);
+        $text    = empty($TDC['text'][$key]) ? $url : $myts->htmlSpecialChars($TDC['text'][$key]);
 
         $target = !empty($TDC['target'][$key]) ? $TDC['target'][$key] : '_blank';
+
+        $opensNewWindow = ($target && ($target === '_blank' || $target === '_new'));
+        $fileExtension  = Utility::fileExtensions($url);
+
+        if ($fileExtension && $opensNewWindow) {
+            // 同時是檔案且開新視窗
+            $title = "title='{$fileExtension}格式（另開新視窗）'";
+        } elseif ($fileExtension) {
+            // 只是檔案
+            $title = "title='{$fileExtension}格式'";
+        } elseif ($opensNewWindow) {
+            // 只是開新視窗
+            $title = "title='另開新視窗'";
+        }
+
         $content .= <<<"EOD"
-<div id="tad_block_menu_"$bid" class="img-responsive">
-    <a href="$url" class="a_link"  target="{$target}">
+<div id="tad_block_menu_{$bid}" class="img-fluid img-responsive">
+    <a href="$url" class="a_link" target="{$target}" {$title}>
         <div class="R_menu_bg">
             <div class="R_menu_bot" style="background-color: {$m_color}">
                 <div class="shadow"></div>

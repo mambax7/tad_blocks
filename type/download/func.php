@@ -35,7 +35,7 @@ function get_content($bid = 0)
     $TadUpFiles->set_col("download", $file_col_sn);
     $xoopsTpl->assign('file_col_sn', $file_col_sn);
 
-    // $TadUpFiles->set_var('require', true); //必填
+                                             // $TadUpFiles->set_var('require', true); //必填
     $TadUpFiles->set_var("show_tip", false); //不顯示提示
     $upform = $TadUpFiles->upform(true, 'download_files');
     $xoopsTpl->assign('upform', $upform);
@@ -69,6 +69,8 @@ function mk_content($bid, $TDC)
     $TadUpFiles->upload_file('download_files', null, null, null, null, true);
     $TadUpFiles->set_var('filename_size', $font_size);
     $TadUpFiles->set_var('desc_height', $desc_height);
+    $rand = mt_rand(0, 999999);
+    $TadUpFiles->set_var('dl_function_name', 'downloadFile' . $rand);
     $content .= $TadUpFiles->show_files('download_files', true, $mode, true, false, null, null, false);
 
     //show_files($upname="",$thumb=true,$show_mode="",$show_description=false,$show_dl=false,$limit=NULL,$path=NULL,$hash=false,$playSpeed=5000)

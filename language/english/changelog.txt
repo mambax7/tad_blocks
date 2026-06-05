@@ -1,3 +1,7 @@
+tad_blocks 3.3 (Released 2026-06-05)
+=================================================
+1. Fixed various blocks to support AAA accessibility
+
 tad_blocks 3.2 (Released 2025-10-30)
 =================================================
 1. Added tad_blocks_files_center index to improve read speed
